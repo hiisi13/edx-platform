@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 from .models import (
     Order,
     PaymentTransactionSync,
-    PaymentProcessorTransaction,
+    PaymentTransaction,
 )
 from .processors import (
     synchronize_transactions
@@ -31,7 +31,7 @@ def perform_sync(start_date=None, end_date=None, summary_email_to=None):
 
     if not start_date:
         # look in the list of synched transactions that we have already done
-        start_date = PaymentProcessorTransaction.get_last_processed_date()
+        start_date = PaymentTransaction.get_last_processed_date()
 
         if not start_date:
             order = (Order.objects.all().order_by('id'))[0]

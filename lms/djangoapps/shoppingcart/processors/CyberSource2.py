@@ -40,7 +40,7 @@ from django.utils.translation import ugettext as _
 from edxmako.shortcuts import render_to_string
 from shoppingcart.models import (
     Order,
-    PaymentProcessorTransaction,
+    PaymentTransaction,
     TRANSACTION_TYPE_PURCHASE,
     TRANSACTION_TYPE_REFUND,
     PaymentTransactionSyncError
@@ -847,7 +847,7 @@ def process_report_data(data):
             else:
                 raise Exception('Unknown transaction_type received: {transaction_type}'.format(transaction_type=_type))
 
-            PaymentProcessorTransaction.create(
+            PaymentTransaction.create(
                 remote_transaction_id,
                 account_id,
                 processed_at,

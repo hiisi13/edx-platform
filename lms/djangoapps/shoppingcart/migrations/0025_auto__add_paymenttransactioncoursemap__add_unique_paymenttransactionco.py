@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         # Adding model 'PaymentTransactionCourseMap'
         db.create_table('shoppingcart_paymenttransactioncoursemap', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('transaction', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['shoppingcart.PaymentProcessorTransaction'])),
+            ('transaction', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['shoppingcart.PaymentTransaction'])),
             ('course_id', self.gf('xmodule_django.models.CourseKeyField')(max_length=255, db_index=True)),
             ('order_item', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['shoppingcart.OrderItem'])),
             ('currency', self.gf('django.db.models.fields.CharField')(max_length=16)),
@@ -33,8 +33,8 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('shoppingcart', ['PaymentTransactionSyncError'])
 
-        # Adding model 'PaymentProcessorTransaction'
-        db.create_table('shoppingcart_paymentprocessortransaction', (
+        # Adding model 'PaymentTransaction'
+        db.create_table('shoppingcart_paymenttransaction', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
             ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
@@ -46,7 +46,7 @@ class Migration(SchemaMigration):
             ('amount', self.gf('django.db.models.fields.DecimalField')(max_digits=30, decimal_places=2)),
             ('transaction_type', self.gf('django.db.models.fields.CharField')(max_length=6, db_index=True)),
         ))
-        db.send_create_signal('shoppingcart', ['PaymentProcessorTransaction'])
+        db.send_create_signal('shoppingcart', ['PaymentTransaction'])
 
         # Adding model 'PaymentTransactionSync'
         db.create_table('shoppingcart_paymenttransactionsync', (
@@ -57,7 +57,7 @@ class Migration(SchemaMigration):
             ('date_range_end', self.gf('django.db.models.fields.DateTimeField')(db_index=True)),
             ('rows_processed', self.gf('django.db.models.fields.IntegerField')()),
             ('rows_in_error', self.gf('django.db.models.fields.IntegerField')()),
-            ('sync_started_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2015, 1, 13, 0, 0))),
+            ('sync_started_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2015, 1, 14, 0, 0))),
             ('sync_ended_at', self.gf('django.db.models.fields.DateTimeField')(null=True)),
         ))
         db.send_create_signal('shoppingcart', ['PaymentTransactionSync'])
@@ -73,8 +73,8 @@ class Migration(SchemaMigration):
         # Deleting model 'PaymentTransactionSyncError'
         db.delete_table('shoppingcart_paymenttransactionsyncerror')
 
-        # Deleting model 'PaymentProcessorTransaction'
-        db.delete_table('shoppingcart_paymentprocessortransaction')
+        # Deleting model 'PaymentTransaction'
+        db.delete_table('shoppingcart_paymenttransaction')
 
         # Deleting model 'PaymentTransactionSync'
         db.delete_table('shoppingcart_paymenttransactionsync')
@@ -128,7 +128,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Coupon'},
             'code': ('django.db.models.fields.CharField', [], {'max_length': '32', 'db_index': 'True'}),
             'course_id': ('xmodule_django.models.CourseKeyField', [], {'max_length': '255'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 1, 13, 0, 0)'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 1, 14, 0, 0)'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'expiration_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
@@ -159,7 +159,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'CourseRegistrationCode'},
             'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'db_index': 'True'}),
             'course_id': ('xmodule_django.models.CourseKeyField', [], {'max_length': '255', 'db_index': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 1, 13, 0, 0)'}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 1, 14, 0, 0)'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'created_by_user'", 'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'invoice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['shoppingcart.Invoice']", 'null': 'True'}),
@@ -258,8 +258,8 @@ class Migration(SchemaMigration):
             'course_id': ('xmodule_django.models.CourseKeyField', [], {'unique': 'True', 'max_length': '128', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        'shoppingcart.paymentprocessortransaction': {
-            'Meta': {'object_name': 'PaymentProcessorTransaction'},
+        'shoppingcart.paymenttransaction': {
+            'Meta': {'object_name': 'PaymentTransaction'},
             'account_id': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True'}),
             'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '30', 'decimal_places': '2'}),
             'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
@@ -278,7 +278,7 @@ class Migration(SchemaMigration):
             'currency': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'order_item': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['shoppingcart.OrderItem']"}),
-            'transaction': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['shoppingcart.PaymentProcessorTransaction']"})
+            'transaction': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['shoppingcart.PaymentTransaction']"})
         },
         'shoppingcart.paymenttransactionsync': {
             'Meta': {'object_name': 'PaymentTransactionSync'},
@@ -290,7 +290,7 @@ class Migration(SchemaMigration):
             'rows_in_error': ('django.db.models.fields.IntegerField', [], {}),
             'rows_processed': ('django.db.models.fields.IntegerField', [], {}),
             'sync_ended_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
-            'sync_started_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 1, 13, 0, 0)'})
+            'sync_started_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 1, 14, 0, 0)'})
         },
         'shoppingcart.paymenttransactionsyncerror': {
             'Meta': {'object_name': 'PaymentTransactionSyncError'},
@@ -306,7 +306,7 @@ class Migration(SchemaMigration):
             'course_enrollment': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['student.CourseEnrollment']", 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'order': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['shoppingcart.Order']", 'null': 'True'}),
-            'redeemed_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 1, 13, 0, 0)', 'null': 'True'}),
+            'redeemed_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 1, 14, 0, 0)', 'null': 'True'}),
             'redeemed_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'registration_code': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['shoppingcart.CourseRegistrationCode']"})
         },

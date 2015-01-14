@@ -19,7 +19,7 @@ from shoppingcart.models import (
     Order,
     OrderItem,
     PaidCourseRegistration,
-    PaymentProcessorTransaction,
+    PaymentTransaction,
     TRANSACTION_TYPE_PURCHASE,
     TRANSACTION_TYPE_REFUND
 )
@@ -628,10 +628,10 @@ class CyberSource2Test(TestCase):
         self.assertEqual(num_in_err, 0)
         self.assertEqual(len(errors), 0)
 
-        # verify that we have saved PaymentProcessorTransactions
-        self.assertEqual(len(PaymentProcessorTransaction.objects.all()), 3)
+        # verify that we have saved PaymentTransactions
+        self.assertEqual(len(PaymentTransaction.objects.all()), 3)
 
-        trans = PaymentProcessorTransaction.get_by_remote_transaction_id('100')
+        trans = PaymentTransaction.get_by_remote_transaction_id('100')
         self.assertEqual(trans.transaction_type, TRANSACTION_TYPE_PURCHASE)
         self.assertEqual(trans.account_id, 'foo')
         self.assertEqual(trans.order.id, order.id)
@@ -639,22 +639,22 @@ class CyberSource2Test(TestCase):
         self.assertEqual(trans.amount, order.total_cost)
         self.assertEqual(trans.processed_at, datetime.datetime(2015, 1, 2, tzinfo=pytz.UTC))
 
-        trans = PaymentProcessorTransaction.get_by_remote_transaction_id('101')
+        trans = PaymentTransaction.get_by_remote_transaction_id('101')
         self.assertEqual(trans.transaction_type, TRANSACTION_TYPE_REFUND)
 
         # now verify that we have transaction to course mappings
-        course_transactions = PaymentProcessorTransaction.get_transactions_for_course(course.id)
+        course_transactions = PaymentTransaction.get_transactions_for_course(course.id)
         self.assertEqual(len(course_transactions.all()), 2)
 
-        course_transactions = PaymentProcessorTransaction.get_transactions_for_course(course2.id)
+        course_transactions = PaymentTransaction.get_transactions_for_course(course2.id)
         self.assertEqual(len(course_transactions.all()), 1)
 
         # very that transaction aggregations are as expected
-        amounts = PaymentProcessorTransaction.get_transaction_totals_for_course(course.id)
+        amounts = PaymentTransaction.get_transaction_totals_for_course(course.id)
         self.assertEqual(amounts['purchased'], order.total_cost)
         self.assertEqual(amounts['refunded'], -order.total_cost)
 
-        amounts = PaymentProcessorTransaction.get_transaction_totals_for_course(course2.id)
+        amounts = PaymentTransaction.get_transaction_totals_for_course(course2.id)
         self.assertEqual(amounts['purchased'], order2.total_cost)
         self.assertEqual(amounts['refunded'], 0.0)
 
@@ -769,16 +769,16 @@ class CyberSource2Test(TestCase):
         self.assertEqual(num_in_err, 0)
         self.assertEqual(len(errors), 0)
 
-        # verify that we have saved PaymentProcessorTransactions
-        self.assertEqual(len(PaymentProcessorTransaction.objects.all()), 1)
+        # verify that we have saved PaymentTransactions
+        self.assertEqual(len(PaymentTransaction.objects.all()), 1)
 
         # see that the aggregates are as expected
         # very that transaction aggregations are as expected
-        amounts = PaymentProcessorTransaction.get_transaction_totals_for_course(course.id)
+        amounts = PaymentTransaction.get_transaction_totals_for_course(course.id)
         self.assertEqual(amounts['purchased'], 40)
         self.assertEqual(amounts['refunded'], 0.0)
 
-        amounts = PaymentProcessorTransaction.get_transaction_totals_for_course(course2.id)
+        amounts = PaymentTransaction.get_transaction_totals_for_course(course2.id)
         self.assertEqual(amounts['purchased'], 100)
         self.assertEqual(amounts['refunded'], 0.0)
 
@@ -852,11 +852,11 @@ class CyberSource2Test(TestCase):
 
         # see that the aggregates are as expected
         # very that transaction aggregations are as expected
-        amounts = PaymentProcessorTransaction.get_transaction_totals_for_course(course.id)
+        amounts = PaymentTransaction.get_transaction_totals_for_course(course.id)
         self.assertEqual(amounts['purchased'], 40)
         self.assertEqual(amounts['refunded'], -40.0)
 
-        amounts = PaymentProcessorTransaction.get_transaction_totals_for_course(course2.id)
+        amounts = PaymentTransaction.get_transaction_totals_for_course(course2.id)
         self.assertEqual(amounts['purchased'], 100)
         self.assertEqual(amounts['refunded'], 0.0)
 
@@ -901,15 +901,15 @@ class CyberSource2Test(TestCase):
 
         # verify that we don't have twice as many rows
         # even though we synced twice
-        self.assertEqual(len(PaymentProcessorTransaction.objects.all()), 3)
+        self.assertEqual(len(PaymentTransaction.objects.all()), 3)
 
         # see that the aggregates are as expected
         # very that transaction aggregations are as expected
-        amounts = PaymentProcessorTransaction.get_transaction_totals_for_course(course.id)
+        amounts = PaymentTransaction.get_transaction_totals_for_course(course.id)
         self.assertEqual(amounts['purchased'], 40)
         self.assertEqual(amounts['refunded'], -40.0)
 
-        amounts = PaymentProcessorTransaction.get_transaction_totals_for_course(course2.id)
+        amounts = PaymentTransaction.get_transaction_totals_for_course(course2.id)
         self.assertEqual(amounts['purchased'], 100)
         self.assertEqual(amounts['refunded'], 0.0)
 
