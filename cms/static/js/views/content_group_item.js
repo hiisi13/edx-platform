@@ -37,36 +37,6 @@ define([
         createDetailsView: function() {
             return new ContentGroupDetailsView({model: this.model});
         }
-
-//        deleteItem: function(event) {
-//            if (event && event.preventDefault) { event.preventDefault(); }
-//            if (!this.canDelete) { return; }
-//            var model = this.model.collection.parents[0],
-//                itemDisplayName = this.itemDisplayName;
-//            ViewUtils.confirmThenRunOperation(
-//                interpolate(
-//                    // Translators: "item_display_name" is the name of the item to be deleted.
-//                    gettext('Delete this %(item_display_name)s?'),
-//                    {item_display_name: itemDisplayName}, true
-//                ),
-//                interpolate(
-//                    // Translators: "item_display_name" is the name of the item to be deleted.
-//                    gettext('Deleting this %(item_display_name)s is permanent and cannot be undone.'),
-//                    {item_display_name: itemDisplayName},
-//                    true
-//                ),
-//                gettext('Delete'),
-//                function() {
-//                    return ViewUtils.runOperationShowingMessage(
-//                        gettext('Deleting'),
-//                        function () {
-//                            return model.destroy({wait: true});
-//                        }
-//                    );
-//                }
-//            );
-//        }
-
     });
 
     return ContentGroupItemView;

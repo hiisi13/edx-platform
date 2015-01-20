@@ -1450,12 +1450,12 @@ class GroupConfiguration(object):
         {'group_id':
             [
                 {
-                    'label': 'Unit 1 / Experiment 1',
+                    'label': 'Unit 1 / Problem 1',
                     'url': 'url_to_unit_1',
                     'validation': {'message': 'a validation message', 'type': 'warning'}
                 },
                 {
-                    'label': 'Unit 2 / Experiment 2',
+                    'label': 'Unit 2 / Problem 2',
                     'url': 'url_to_unit_2',
                     'validation': {'message': 'another validation message', 'type': 'error'}
                 }
@@ -1464,7 +1464,7 @@ class GroupConfiguration(object):
         """
         usage_info = {}
         for group in content_groups:
-            if hasattr(group, 'group_access'):
+            if hasattr(group, 'group_access') and group.group_access:
                 (user_partition_id, group_ids), = group.group_access.items()
                 for group_id in group_ids:
                     if group_id not in usage_info:
@@ -1659,11 +1659,8 @@ def group_configurations_detail_handler(request, course_key_string, group_config
             else:
                 course.user_partitions.append(new_configuration)
             store.update_item(course, request.user.id)
-
             configuration = GroupConfiguration.update_usage_info(store, course, new_configuration)
-            response = JsonResponse(configuration, status=201)
-
-            return response
+            return JsonResponse(configuration, status=201)
 
         elif request.method == "DELETE":
             if not configuration:
@@ -1682,7 +1679,6 @@ def group_configurations_detail_handler(request, course_key_string, group_config
 
                 if used:
                     return response_400
-
                 course.user_partitions.pop(index)
             else:
                 group_id = int(group_id)

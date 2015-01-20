@@ -51,18 +51,6 @@
         <% _.each(usage, function(unit) { %>
           <li class="usage-unit group-configuration-usage-unit">
             <p><a href=<%= unit.url %> ><%= unit.label %></a></p>
-            <% if (unit.validation) { %>
-              <p>
-                <% if (unit.validation.type === 'warning') { %>
-                  <i class="icon fa fa-warning"></i>
-                <% } else if (unit.validation.type === 'error') { %>
-                  <i class="icon fa fa-exclamation-circle"></i>
-                <% } %>
-                <span class="usage-validation-message group-configuration-validation-message">
-                  <%= unit.validation.text %>
-                </span>
-              </p>
-            <% } %>
           </li>
         <% }) %>
       </ol>

@@ -91,7 +91,6 @@ define([
 
             return str.sprintf(message, {outlineAnchor: anchor});
         }
-
     });
 
     return ContentGroupDetailsView;

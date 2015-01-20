@@ -23,6 +23,7 @@ function(ListItemEditorView, _) {
 
         getTemplateOptions: function() {
             return {
+                id: this.model.escape('id'),
                 name: this.model.escape('name'),
                 index: this.model.collection.indexOf(this.model),
                 isNew: this.model.isNew(),
@@ -36,16 +37,8 @@ function(ListItemEditorView, _) {
             return this;
         },
 
-        getSaveableModel: function(cancelled) {
-//            if (cancelled === true) {
-//                return this.model
-//            }
-//            else {
-//                return this.model.collection.parents[0]
-//            }
+        getSaveableModel: function() {
             return this.model.collection.parents[0];
-//            return this.model.collection.parents[0].set({usage: this.model.get('usage')})
-//            return (cancelled == true ? this.model : this.model.collection.parents[0]);
         }
     });
 
