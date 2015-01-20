@@ -94,3 +94,15 @@ class HtmlDescriptorIndexingTestCase(unittest.TestCase):
             "content": {"html_content": " Text has spaces :) ", "display_name": "Text"},
             "content_type": "HTML Content"
         })
+
+        sample_xml_comment = '''
+            <html>
+                <p>This has HTML comment in it.</p>
+                <!-- Html Comment -->
+            </html>
+        '''
+        descriptor = instantiate_descriptor(data=sample_xml_comment)
+        self.assertEqual(descriptor.index_dictionary(), {
+            "content": {"html_content": " This has HTML comment in it. ", "display_name": "Text"},
+            "content_type": "HTML Content"
+        })
