@@ -53,6 +53,9 @@ class StudentModuleFactory(cmfStudentModuleFactory):
 
 
 class TestInvalidScopes(TestCase):
+    """
+    Invalid scope testing for KeyValueStore
+    """
     def setUp(self):
         self.user = UserFactory.create(username='user')
         self.field_data_cache = FieldDataCache([mock_descriptor([mock_field(Scope.user_state, 'a_field')])], course_id, self.user)
@@ -178,6 +181,9 @@ class TestStudentModuleStorage(OtherUserFailureTestMixin, TestCase):
 
 
 class TestMissingStudentModule(TestCase):
+    """
+    Test StudentModule for a particular course.
+    """
     def setUp(self):
         self.user = UserFactory.create(username='user')
         self.assertEqual(self.user.id, 1)   # check our assumption hard-coded in the key functions above.
