@@ -869,6 +869,11 @@ def create_xblock_info(xblock, data=None, metadata=None, include_ancestor_info=F
     override_type = {}
     if getattr(xblock, "is_entrance_exam", None):
         override_type['is_entrance_exam'] = xblock.is_entrance_exam
+    # If the xblock is a subsection of an entrance exam then set the over_type 'subsection_entrance_exam'
+    #  for this Xblock.
+    if getattr(xblock.get_parent(), "is_entrance_exam", None) \
+            and xblock.category == 'sequential' and xblock.get_parent().is_entrance_exam:
+        override_type['subsection_entrance_exam'] = True
 
     xblock_info = {
         "id": unicode(xblock.location),

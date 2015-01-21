@@ -172,13 +172,25 @@ function(Backbone, _, str, ModuleUtils) {
             return !this.get('published') || this.get('has_changes');
         },
 
-        canBeDeleted: function(){
+        showSectionContent: function(){
             //get the type of xblock
             if(this.get('override_type') != null) {
                 var type = this.get('override_type');
 
-                //hide/remove the delete trash icon if type is entrance exam.
+                //hide the delete/drag icon if type is entrance exam.
                 if (_.has(type, 'is_entrance_exam') && type['is_entrance_exam']) {
+                    return false;
+                }
+            }
+            return true;
+        },
+
+       showSubSectionContent: function(){
+            if(this.get('override_type') != null) {
+                var type = this.get('override_type');
+
+                //hide the subsection for entrance exam.
+                if (_.has(type, 'subsection_entrance_exam') && type['subsection_entrance_exam']) {
                     return false;
                 }
             }
