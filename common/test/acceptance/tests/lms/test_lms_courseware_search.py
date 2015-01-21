@@ -68,8 +68,10 @@ class CoursewareSearchTest(UniqueCourseTest):
         Logout and login with given credentials.
         """
         LogoutPage(self.browser).visit()
-        AutoAuthPage(self.browser, username=username, email=email,
-                     course_id=self.course_id, staff=staff).visit()
+        login_page = AutoAuthPage(self.browser, username=username, email=email,
+                     course_id=self.course_id, staff=staff)
+        login_page.wait_for_page()
+        login_page.visit()
 
     def test_page_existence(self):
         """
